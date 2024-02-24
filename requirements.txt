@@ -1,0 +1,8 @@
+pandas
+plotly
+streamlit
+openpyxl
+requests
+webdriver-manager
+selenium
+seleniumbase
