@@ -5,27 +5,36 @@ from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
 
 def selen_func():
-    sites = 'http://google.com'
-    random_site = sites
+    chrome_driver_path = "./chromedriver"
 
-    # Создаем объект опций для Chrome
+    #@st.cache_resource
+    def get_driver():
+        return webdriver.Chrome(ChromeDriverManager().install())(options=options)
+
+
+
     options = Options()
-    options.add_argument("--headless")  # Запуск браузера без GUI
-    options.add_argument("--no-sandbox")  # Обход режима песочницы
-    options.add_argument("--disable-dev-shm-usage")  # Отключение использования /dev/shm
-    options.add_argument("--disable-gpu")  # Отключение аппаратного ускорения
-    options.add_argument("--disable-features=NetworkService")  # Отключение NetworkService
-    options.add_argument("--window-size=1920x1080")  # Установка размера окна
-    options.add_argument("--disable-features=VizDisplayCompositor")  # Отключение VizDisplayCompositor
+    options.add_argument('--disable-gpu')
+    options.add_argument('--headless')
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
 
-    # Инициализация драйвера с учетом опций
-    service = Service(ChromeDriverManager().install())
-    driver = webdriver.Chrome(service=service, options=options)
+    driver = get_driver()
+    
+    #try:
+    #    driver.quit()
+    #except:
+    #    st.write("good quit")
 
-    driver.get(random_site)
+    try:
+        driver.get("https://hh.ru/account/login?customDomain=1")
+        sleep(5)
+        print(1)
+        st.write("Scraper activation (preparation for scraping 1/5)")
+    except:
+        st.write("1/5-non")
     data = driver.page_source
     driver.quit()
-
     soup = BeautifulSoup(data, 'html.parser')
     span_element = soup.find('span', class_='ktLKi')
 
